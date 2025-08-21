@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ map_name }} — Leaderboard</h2>
+
+  <table class="board">
+    <thead>
+      <tr><th>#</th><th>Player</th><th>Time (s)</th></tr>
+    </thead>
+    <tbody>
+      {% for entry in times %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ entry.name }}</td>
+          <td>{{ "%.2f"|format(entry.time) }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="3" class="empty">No times yet — be the first!</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Submit a Time</h3>
+  <form method="POST" action="{{ url_for('submit') }}" class="submit-form">
+    <input type="hidden" name="map" value="{{ map_name }}">
+    <input type="text" name="name" placeholder="Your name" required>
+    <input type="number" name="time" step="0.01" min="0" placeholder="Time in seconds" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p><a href="{{ url_for('index') }}">← Back to tracks</a></p>
+{% endblock %}
