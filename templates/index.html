@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Choose a Track</h2>
+  <ul class="track-list">
+    {% for m in maps %}
+      <li><a href="{{ url_for('leaderboard', map_name=m) }}">{{ m }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
