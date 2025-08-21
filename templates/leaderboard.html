@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>{{ map_name }} — Leaderboard</h2>
+  <h2>{{ map_name }}</h2>
 
   <table class="board">
     <thead>
-      <tr><th>#</th><th>Player</th><th>Time (s)</th></tr>
+      <tr><th>#</th><th>Player</th><th>Time</th></tr>
     </thead>
     <tbody>
       {% for entry in times %}
         <tr>
           <td>{{ loop.index }}</td>
           <td>{{ entry.name }}</td>
-          <td>{{ "%.2f"|format(entry.time) }}</td>
+          <td>{{ "%02d:%02d:%03d"|format(entry.time_mins, entry.time_s, entry.time_ms) }}</td>
         </tr>
       {% else %}
         <tr><td colspan="3" class="empty">No times yet — be the first!</td></tr>
@@ -21,9 +21,11 @@
 
   <h3>Submit a Time</h3>
   <form method="POST" action="{{ url_for('submit') }}" class="submit-form">
-    <input type="hidden" name="map" value="{{ map_name }}">
-    <input type="text" name="name" placeholder="Your name" required>
-    <input type="number" name="time" step="0.01" min="0" placeholder="Time in seconds" required>
+    <input type="hidden" name="map_name" value="{{ map_name }}">
+    <input type="text" name="name" placeholder="Your username" required>
+    <input type="number" name="time_mins" step="0.01" min="0" placeholder="m" required>
+    <input type="number" name="time_s" step="0.01" min="0" placeholder="s" required>
+    <input type="number" name="time_ms" step="0.01" min="0" placeholder="ms" required>
     <button type="submit">Submit</button>
   </form>
 
