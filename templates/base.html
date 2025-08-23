@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=devide-width, intial-scale=1">
     <title>Mario Kart 8 Deluxe Leaderboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 </head>
-<body>
-  <header>
+<body class="layout">
+  <header class="site-header">
     <h1><a href="{{ url_for('index') }}">Mario Kart 8 Deluxe Leaderboard</a></h1>
   </header>
-  <main>
+
+  <main class="page-content">
     {% block content %}{% endblock %}
   </main>
-  <footer>
+
+  <footer class="site-footer">
     <small>Built with Flask</small>
   </footer>
 </body>

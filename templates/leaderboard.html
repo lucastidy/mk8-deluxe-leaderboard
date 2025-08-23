@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>{{ map_name }}</h2>
+  <h2 class="map_title">{{ map_name }}</h2>
 
-  <table class="board">
-    <thead>
-      <tr><th>#</th><th>Player</th><th>Time</th></tr>
-    </thead>
-    <tbody>
-      {% for entry in times %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>{{ entry.name }}</td>
-          <td>{{ "%02d:%02d:%03d"|format(entry.time_mins, entry.time_s, entry.time_ms) }}</td>
-        </tr>
-      {% else %}
-        <tr><td colspan="3" class="empty">No times yet — be the first!</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="board-wrapper">
+    <table class="board">
+      <thead>
+        <tr><th>#</th><th>Player</th><th>Time</th></tr>
+      </thead>
+      <tbody>
+        {% for entry in times %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ entry.name }}</td>
+            <td>{{ "%02d:%02d:%03d"|format(entry.time_mins, entry.time_s, entry.time_ms) }}</td>
+          </tr>
+        {% else %}
+          <tr><td colspan="3" class="empty">No times yet — be the first!</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   <h3>Submit a Time</h3>
   <form method="POST" action="{{ url_for('submit') }}" class="submit-form">
@@ -30,4 +32,5 @@
   </form>
 
   <p><a href="{{ url_for('index') }}">← Back to tracks</a></p>
+  
 {% endblock %}

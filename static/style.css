@@ -1,0 +1,166 @@
+/* page fills viewport; footer sits at bottom */
+html, body { height: 100%; margin: 0; }
+body.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #f5f5f5;
+  font-family: system-ui, sans-serif;
+  background: var(--clr-1);
+}
+
+
+.page-content {
+  flex: 1 1 auto;             /* pushes footer to the bottom */
+  padding: 1rem;
+  display: flow-root;   /* prevents margin-collapsing from first child */
+  isolation: isolate;
+}
+
+.site-header {
+  background: var(--clr-1);
+  color: #aaa;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  margin-top: 0rem;
+  flex: 0 0 auto;
+}
+
+.site-footer {
+  background: var(--clr-1);
+  color: #aaa;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  flex: 0 0 auto;
+  margin-top: auto;
+  z-index: 2;
+}
+
+/* Title above each leaderboard */
+.map_title {
+  text-align: center;
+  font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  font-size: clamp(1.8rem, 4vw + 0.5rem, 3rem);
+  color: #fafbc7;
+  /* mario style shadow */
+  text-shadow:
+    0.06em 0.06em 0 #eecc3280,
+    -0.06em 0.06em 0 #ea161640;
+  background: none;  
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.board-wrapper {
+    overflow-x: hidden;      /* adds scroll if needed */
+    max-width: 100%;
+    max-width: 800px;
+    margin: 0 auto;        /* center the wrapper horizontally */
+}
+
+.board {
+    border-collapse: collapse;
+    width: 100%;               /* take full width of parent */
+    max-width: 90%;            /* but never wider than 90% of screen */
+    margin: 2rem auto;         /* center horizontally, scale with font size */
+    background: #fff;
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    font-size: 1rem;           /* base font size, will scale with root */
+    color: #333;               /* dark text on light bg */
+    position: relative;
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+:root {
+  --clr-1: #052b2f;
+  --clr-2: #073438;
+  --clr-3: #0e4b50;
+  --clr-4: #2d8f85;
+  --clr-5: #637c54;
+}
+
+.board {
+  background: #fff;
+  border-radius: 0.8rem;
+  position: relative;
+}
+
+.board::before,
+.board::after {
+  content: "";
+  position: absolute;
+  inset: -1.0rem;
+  z-index: -1;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    var(--clr-3),
+    var(--clr-4),
+    var(--clr-5),
+    var(--clr-4),
+    var(--clr-3)
+  );
+  border-radius: inherit;
+  animation: rotation 6s linear infinite;
+}
+
+.board::after {
+  filter: blur(0.5rem);
+}
+
+@keyframes rotation {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
+}
+
+.board th, 
+.board td {
+  padding: 0.75em 1em;       /* relative to font size, not px */
+  text-align: left;
+}
+
+.board thead th {
+  background: #ebe9e9; 
+  font-weight: 600;
+  color: #333;
+}
+
+.board tbody tr:first-child td {
+    font-weight: 600;
+    background: #fccdcd;
+}
+
+.board tbody tr:nth-child(2) td {
+    font-weight: 600;
+    background: #fcf6cd;
+}
+
+.board tbody tr:nth-child(3) td {
+    font-weight: 600;
+    background: #cdd6fc;
+}
+
+/*.board tr:hover td {
+  background: #cdcccc;       /* subtle hover effect */
+/*}*/
+
+.board .empty {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+  
