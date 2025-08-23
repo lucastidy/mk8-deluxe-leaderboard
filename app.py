@@ -1,9 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, abort
+import re
+from pathlib import Path
 
 app = Flask(__name__)
 
-TRACKS = ["Mushroom Gorge"]
+TRACKS = ["Mushroom Gorge", "Bowser's Castle", "Rainbow Road Wii"]
 leaderboards = {track: [] for track in TRACKS}
+
+def to_slug(name: str) -> str:
+    # lowercase, replace non-letters/numbers with hyphens, collapse repeats
+    slug = re.sub(r'[^a-z0-9]+', '-', name.lower())
+    return slug.strip('-')
 
 @app.route("/")
 def index():
@@ -13,8 +20,19 @@ def index():
 def leaderboard(map_name):
     if map_name not in leaderboards:
         abort(404)
-    times = sorted(leaderboards[map_name], key=lambda x: x["time_mins"] + (x["time_s"] / 60) + (x["time_ms"] / 60000), reverse=True)[:10]
-    return render_template("leaderboard.html", map_name=map_name, times=times)
+    times = sorted(leaderboards[map_name], key=lambda x: x["time_mins"] + (x["time_s"] / 60) + (x["time_ms"] / 60000))[:10]
+    
+    svg_filename = f"{to_slug(map_name)}.svg"
+    svg_path = Path(app.static_folder) / "img" / "maps" / svg_filename
+    has_svg = svg_path.exists()
+
+    return render_template(
+            "leaderboard.html",
+            map_name=map_name,
+            times=times,
+            svg_filename=svg_filename,
+            has_svg=has_svg,
+        )
 
 @app.route("/submit", methods=["POST"])
 def submit():
