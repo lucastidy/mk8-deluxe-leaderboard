@@ -1,14 +1,15 @@
 /* page fills viewport; footer sits at bottom */
-html, body { height: 100%; margin: 0; }
+html, body { height: 100%; margin: 0;  }
 body.layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   color: #f5f5f5;
   font-family: system-ui, sans-serif;
-  background: var(--clr-1);
+  background: linear-gradient(180deg, #1e1e2f, #3a3a5c);
+  background-attachment: fixed;
+  color: #fff;
 }
-
 
 .page-content {
   flex: 1 1 auto;             /* pushes footer to the bottom */
@@ -18,21 +19,65 @@ body.layout {
 }
 
 .site-header {
-  background: var(--clr-1);
-  color: #aaa;
+  color: #fff;
   text-align: center;
   padding: 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   margin-top: 0rem;
   flex: 0 0 auto;
+  overflow: hidden;
+}
+
+
+
+.bg-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;   /* crop the image */
+  height: 15%;        /* only show top 20% */
+  max-height: 20%;
+  opacity: 1;
+  z-index: -1;
+}
+
+.bg-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.site-header h1 {
+  margin: 0; /* kill default margins */
+}
+
+.site-header h1 a {
+  display: inline-block;
+  padding: 1rem 1rem;
+  background: #ff4747;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 0 #c33, 0 6px 6px rgba(0,0,0,0.3);
+  font-size: clamp(1.2rem, 5vw, 2rem); /* scales with screen size */
+  white-space: nowrap; /* stops breaking into two lines */
+  transition: all 0.15s ease-in-out;
+}
+
+.site-header h1 a:hover {
+  background: #ff7070;
+  box-shadow: 0 2px 0 #c33, 0 3px 3px rgba(0,0,0,0.3);
+  transform: translateY(2px);
 }
 
 .site-footer {
-  background: var(--clr-1);
+  background: #3a3a5c;
   color: #aaa;
   text-align: center;
   padding: 1rem;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   flex: 0 0 auto;
   margin-top: auto;
   z-index: 2;
@@ -47,11 +92,11 @@ body.layout {
   font-size: clamp(1.8rem, 4vw + 0.5rem, 3rem);
   color: #fafbc7;
   /* mario style shadow */
-  text-shadow:
-    0.06em 0.06em 0 #eecc3280,
-    -0.06em 0.06em 0 #ea161640;
+  text-shadow: 2px 2px 0 #000; /* comic-y outline */
+    /* 0.06em 0.06em 0 #eecc3280,
+    -0.06em 0.06em 0 #ea161640; */
   background: none;  
-  margin-top: 2rem;
+  margin-top: 3rem;
   margin-bottom: 0.5rem;
 }
 
@@ -83,15 +128,14 @@ body.layout {
 }
 
 :root {
-  --clr-1: #052b2f;
-  --clr-2: #073438;
-  --clr-3: #0e4b50;
-  --clr-4: #2d8f85;
-  --clr-5: #637c54;
+  --clr-1: #1e1e2f;
+  --clr-2: #863e03;
+  --clr-3: #910b0b;
+  --clr-4: #8ab51c;
+  --clr-5: #354f9e;
 }
 
 .board {
-  background: #fff;
   border-radius: 0.8rem;
   position: relative;
 }
@@ -100,7 +144,7 @@ body.layout {
 .board::after {
   content: "";
   position: absolute;
-  inset: -1.0rem;
+  inset: -0.5rem;
   z-index: -1;
   background: conic-gradient(
     from var(--gradient-angle),
@@ -164,3 +208,54 @@ body.layout {
   font-style: italic;
 }
   
+.back-link a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #ff4747;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 3px 0 #c33, 0 4px 4px rgba(0,0,0,0.25);
+  transition: all 0.15s ease-in-out;
+}
+
+.back-link a:hover {
+  background: #ff7070;
+  box-shadow: 0 1px 0 #c33, 0 2px 2px rgba(0,0,0,0.25);
+  transform: translateY(2px);
+}
+
+.submit-button {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #ff4747;
+  color: #fff;
+  border: none;              /* remove default button border */
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;           /* hand cursor like links */
+  text-decoration: none;
+  line-height: 1;            /* normalize vertical alignment */
+  box-shadow: 0 3px 0 #c33, 0 4px 4px rgba(0,0,0,0.25);
+  transition: all 0.15s ease-in-out;
+  margin-top: 0.8rem;
+}
+
+.submit-button:hover {
+  background: #ff7070;
+  box-shadow: 0 1px 0 #c33, 0 2px 2px rgba(0,0,0,0.25);
+  transform: translateY(2px);
+}
+
+.submit-button:focus {
+  outline: none;             /* remove default focus ring */
+}
+
+.submit-button:active {
+  transform: translateY(2px); /* ensures click state matches hover */
+}
+
+
