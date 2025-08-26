@@ -1,0 +1,15 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore Git
+.git
+.gitignore
+
+# Ignore virtual environments
+venv/
+.env
+
+# Ignore OS junk
+.DS_Store
+*.swp
