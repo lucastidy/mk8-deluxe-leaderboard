@@ -4,11 +4,11 @@ from pathlib import Path
 
 app = Flask(__name__)
 
-TRACKS = ["Mushroom Gorge", "Bowser's Castle", "Rainbow Road Wii"]
+TRACKS = ["Mushroom Gorge", "Bowser's Castle", "Rainbow Road Wii", "Coconut Mall"]
 leaderboards = {track: [] for track in TRACKS}
 
 def to_slug(name: str) -> str:
-    # lowercase, replace non-letters/numbers with hyphens, collapse repeats
+    # lowercase, replace non letters/numbers with hyphens, collapse repeats
     slug = re.sub(r'[^a-z0-9]+', '-', name.lower())
     return slug.strip('-')
 
