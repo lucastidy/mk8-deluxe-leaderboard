@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 import os
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 
@@ -10,6 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///lea
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 TRACKS = ["Mushroom Gorge", "Bowser's Castle", "Rainbow Road Wii", "Coconut Mall"]
 #leaderboards = {track: [] for track in TRACKS}
