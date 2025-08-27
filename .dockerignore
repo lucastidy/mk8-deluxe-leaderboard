@@ -10,6 +10,10 @@ __pycache__/
 venv/
 .env
 
+# SQLite dev database
+leaderboard.db
+
 # Ignore OS junk
 .DS_Store
 *.swp
+

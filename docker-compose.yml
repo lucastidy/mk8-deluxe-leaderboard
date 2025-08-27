@@ -6,7 +6,5 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
-    environment:
-      - MODE=development
-      - FLASK_APP=app.py
-      - FLASK_ENV=development
+    env_file:
+      - .env
