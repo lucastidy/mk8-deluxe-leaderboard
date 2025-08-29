@@ -7,9 +7,14 @@
   </div>
   {% endif %}
   <h2 class="map_title">Choose a Track:</h2>
-  <ul style="list-style-type: none;">
-    {% for m in maps %}
-      <li><a href="{{ url_for('leaderboard', map_name=m) }}" class="submit-button">{{ m }}</a></li>
-    {% endfor %}
-  </ul>
+  {% for cup, tracks in CUPS.items() %}
+    <h3 class="cup-title">{{ cup }}</h3>
+    <ul class="track-list">
+      {% for m in tracks %}
+        <li>
+          <a href="{{ url_for('leaderboard', map_name=m) }}" class="submit-button">{{ m }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
 {% endblock %}
