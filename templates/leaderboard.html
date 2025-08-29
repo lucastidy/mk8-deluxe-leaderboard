@@ -11,7 +11,7 @@
         {% for entry in times %}
           <tr>
             <td>{{ loop.index }}</td>
-            <td>{{ entry.name }}</td>
+            <td>{{ entry.user.username }}</td>
             <td>{{ "%02d:%02d:%03d"|format(entry.time_mins, entry.time_s, entry.time_ms) }}</td>
           </tr>
         {% else %}
@@ -22,14 +22,28 @@
   </div>
 
   <h3>Submit a Time:</h3>
-  <form method="POST" action="{{ url_for('submit') }}" class="submit-form">
-    <input type="hidden" name="map_name" value="{{ map_name }}">
-    <input type="text" name="name" placeholder="Your username" required>
-    <input type="number" name="time_mins" step="0.01" min="0" placeholder="m" required>
-    <input type="number" name="time_s" step="0.01" min="0" placeholder="s" required>
-    <input type="number" name="time_ms" step="0.01" min="0" placeholder="ms" required>
-    <button type="submit" class="submit-button">Submit!</button>
-  </form>
+  {% if current_user.is_authenticated %}
+    <form method="POST" action="{{ url_for('submit') }}" class="submit-form">
+      <input type="hidden" name="map_name" value="{{ map_name }}">
+      <div class="input-wrapper">
+        <input type="number" name="time_mins" step="0.01" min="0" placeholder="m" required>
+      </div>
+      <div class="input-wrapper">
+        <input type="number" name="time_s" step="0.01" min="0" placeholder="s" required>
+      </div>
+      <div class="input-wrapper">
+        <input type="number" name="time_ms" step="0.01" min="0" placeholder="ms" required>
+      </div>
+      <button type="submit" class="submit-button">Submit!</button>
+    </form>
+  {% else %}
+      <div>
+        <p>You must be logged in to submit a time:</p>
+      </div>
+      <div class="not-signed-up">
+        <a href="{{ url_for('login') }}">Login</a>
+      </div>
+  {% endif %}
 
   <p class="back-link"><a href="{{ url_for('index') }}">← Back to tracks</a></p>
   

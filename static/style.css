@@ -93,7 +93,7 @@ body.layout {
   color: #fafbc7;
   text-shadow: 2px 2px 0 #000;
   background: none;
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
 
@@ -132,8 +132,8 @@ body.layout {
   --clr-5: #354f9e;
 }
 
-.board {
-  border-radius: 0.8rem;
+.board { /* FIXME: duplicate */
+  border-radius: 0.8rem; 
   position: relative;
 }
 
@@ -255,4 +255,149 @@ body.layout {
   transform: translateY(2px); /* ensures click state matches hover */
 }
 
+.submit-button-signup {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #b8afd7;
+  color: #180e0e;
+  border: none;              /* remove default button border */
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;           /* hand cursor like links */
+  text-decoration: none;
+  line-height: 1;            
+  box-shadow: 0 3px 0 rgb(73, 66, 88), 0 4px 4px rgba(0,0,0,0.25);
+  transition: all 0.15s ease-in-out;
+  margin-top: 0.8rem;
+}
 
+.submit-button-signup:hover {
+  background: #fff;
+  box-shadow: 0 1px 0 rgb(197, 189, 231), 0 2px 2px rgba(0,0,0,0.25);
+  transform: translateY(2px);
+}
+
+.submit-button-signup:focus {
+  outline: none;             /* remove default focus ring */
+}
+
+.submit-button-signup:active {
+  transform: translateY(2px); /* ensures click state matches hover */
+}
+
+.sign-up-buttons {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: center;
+  margin-top: 1rem;
+} 
+
+.sign-up-buttons a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #b8afd7;
+  color: #180e0e;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 3px 0 rgb(73, 66, 88), 0 4px 4px rgba(0,0,0,0.25);
+  transition: all 0.15s ease-in-out;
+}
+
+.sign-up-buttons a:hover {
+  background: #fff;
+  box-shadow: 0 1px 0 rgb(197, 189, 231), 0 2px 2px rgba(0,0,0,0.25);
+  transform: translateY(2px);
+}
+
+.sign-up-buttons {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: center;
+  margin-top: 1rem;
+} 
+
+.not-signed-up a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #b8afd7;
+  color: #180e0e;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 3px 0 rgb(73, 66, 88), 0 4px 4px rgba(0,0,0,0.25);
+  transition: all 0.15s ease-in-out;
+}
+
+.not-signed-up a:hover {
+  background: #fff;
+  box-shadow: 0 1px 0 rgb(197, 189, 231), 0 2px 2px rgba(0,0,0,0.25);
+  transform: translateY(2px);
+}
+
+.submit-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1rem;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border-radius: 0.8rem;
+}
+
+.submit-form-signup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 4rem;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 0.8rem;
+}
+
+.input-wrapper {
+  position: relative;
+  border-radius: 0.5rem;
+  padding: 2px; /* space for the border */
+  display: inline-block;
+}
+
+.input-wrapper:hover::before,
+.input-wrapper:hover::after {
+  content: "";
+  position: absolute;
+  inset: -0.1rem;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    var(--clr-3),
+    var(--clr-4),
+    var(--clr-5),
+    var(--clr-4),
+    var(--clr-3)
+  );
+  animation: rotation 6s linear infinite;
+}
+
+.input-wrapper::after {
+  filter: blur(0.5rem);
+}
+
+/* actual input styling */
+.input-wrapper input {
+  width: 250px;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  outline: none;
+  background: #fff;
+  z-index: 1;
+  position: relative;
+}

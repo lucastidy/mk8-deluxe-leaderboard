@@ -22,7 +22,13 @@
   </main>
 
   <footer class="site-footer">
+    {% if current_user.is_authenticated %}
+      <div class="not-signed-up">
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    {% else %}
     <small>Built with Flask</small>
+    {% endif %}
   </footer>
 </body>
 </html>
