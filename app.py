@@ -47,9 +47,11 @@ CUPS = {
     "Lightning Cup": [
         "Tick-Tock Clock (DS)", "Piranha Plant Slide (3DS)", "Grumble Volcano (Wii)", "Rainbow Road (N64)"
     ],
-
     "Egg Cup": [
         "Yoshi Circuit (GCN)", "Excitebike Arena", "Dragon Driftway", "Mute City (F-Zero)"
+    ],
+    "Triforce Cup": [
+        "Wario's Gold Mine (Wii)", "Rainbow Road (SNES)", "Ice Ice Outpost", "Hyrule Circuit"
     ],
     "Crossing Cup": [
         "Baby Park (GCN)", "Cheese Land (GBA)", "Wild Woods", "Animal Crossing"
