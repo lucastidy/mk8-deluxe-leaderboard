@@ -29,4 +29,4 @@ jobs:
         run: ruff check .
 
       - name: Run Tests
-        run: pytest
+        run: PYTHONPATH=. pytest
