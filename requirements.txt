@@ -24,3 +24,5 @@ Flask-Migrate
 Flask-login
 Flask-Bcrypt
 Flask-WTF
+pytest
+ruff
