@@ -182,8 +182,6 @@ CUPS = {
 
 TRACKS = [track for tracks in CUPS.values() for track in tracks]
 
-# leaderboards = {track: [] for track in TRACKS}
-
 
 class Leaderboard(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -196,13 +194,17 @@ class Leaderboard(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref="scores")
 
+# user model
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
 
-# FIXME: verify and remove if removing svg code
-def to_slug(name: str) -> str:
-    # lowercase, replace non letters/numbers with hyphens, collapse repeats
-    slug = re.sub(r"[^a-z0-9]+", "-", name.lower())
-    return slug.strip("-")
+    def set_password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)
 
 @app.route("/")
 def index():
@@ -220,17 +222,10 @@ def leaderboard(map_name):
         times, key=lambda x: x.time_mins + (x.time_s / 60) + (x.time_ms / 60000)
     )[:10]
 
-    # FIXME: remove svg code below potentially
-    svg_filename = f"{to_slug(map_name)}.svg"
-    svg_path = Path(app.static_folder) / "img" / "maps" / svg_filename
-    has_svg = svg_path.exists()
-
     return render_template(
         "leaderboard.html",
         map_name=map_name,
         times=times,
-        svg_filename=svg_filename,
-        has_svg=has_svg,
     )
 
 
@@ -248,32 +243,31 @@ def submit():
     if not validate_time(map_name, time_mins, time_s, time_ms, TRACKS):
         return redirect(url_for("leaderboard", map_name=map_name))
 
-    new_entry = Leaderboard(
-        track=map_name,
-        time_mins=time_mins,
-        time_s=time_s,
-        time_ms=time_ms,
-        user_id=current_user.id,
-    )  # attaches to current_user
 
-    db.session.add(new_entry)
+     # check if user already has a record for this track
+    existing_entry = Leaderboard.query.filter_by(
+        track=map_name, user_id=current_user.id
+    ).first()
+
+    if existing_entry:
+        # update existing entry
+        existing_entry.time_mins = time_mins
+        existing_entry.time_s = time_s
+        existing_entry.time_ms = time_ms
+    else:
+        # new entry if not found
+        new_entry = Leaderboard(
+            track=map_name,
+            time_mins=time_mins,
+            time_s=time_s,
+            time_ms=time_ms,
+            user_id=current_user.id,
+        )
+        db.session.add(new_entry)
+
     db.session.commit()
 
     return redirect(url_for("leaderboard", map_name=map_name))
-
-
-# user model
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-
-    def set_password(self, password):
-        self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
-
-    def check_password(self, password):
-        return bcrypt.check_password_hash(self.password_hash, password)
-
 
 # login manager
 login_manager = LoginManager(app)
