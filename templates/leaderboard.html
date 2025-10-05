@@ -21,9 +21,24 @@
     </table>
   </div>
 
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+</div>
+
   <h3>Submit a Time:</h3>
   {% if current_user.is_authenticated %}
-    <form method="POST" action="{{ url_for('submit') }}" class="submit-form">
+    <form method="POST" 
+          action="{{ url_for('submit') }}" 
+          enctype="multipart/form-data"
+          class="submit-form">
       <input type="hidden" name="map_name" value="{{ map_name }}">
       <div class="input-wrapper">
         <input type="number" name="time_mins" step="0.01" min="0" placeholder="m" required>
@@ -34,6 +49,7 @@
       <div class="input-wrapper">
         <input type="number" name="time_ms" step="0.01" min="0" placeholder="ms" required>
       </div>
+      <label>Time verification: <input type="file" name="screenshot" accept="image/*" required></label>
       <button type="submit" class="submit-button">Submit!</button>
     </form>
   {% else %}

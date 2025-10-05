@@ -428,3 +428,11 @@ font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, 
   z-index: 1;
   position: relative;
 }
+
+.flashes { list-style-type: none; padding: 0; }
+.flashes li.invalid_time { color: red; }
+.flashes li.invalid_screenshot { color: red; }
+.flashes li.missing_screenshot { color: red; }
+.flashes li.invalid_credentials { color: red; }
+.flashes li.pending { color: yellow; }
+.flashes li.success { color: green; }

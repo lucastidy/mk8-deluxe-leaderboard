@@ -1,6 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, abort
-import re
-from pathlib import Path
+from flask import Flask, flash, render_template, request, redirect, url_for, abort
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -14,6 +12,8 @@ from flask_login import (
 )
 from utils import validate_time
 from flask_bcrypt import Bcrypt
+from werkzeug.utils import secure_filename
+import uuid
 
 app = Flask(__name__)
 
@@ -190,9 +190,12 @@ class Leaderboard(db.Model):
     time_s = db.Column(db.Integer, nullable=False)
     time_ms = db.Column(db.Integer, nullable=False)
 
-    # link to a specific user
+    #link to a user
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref="scores")
+
+    screenshot_path = db.Column(db.String(255), nullable=False)
+    verified = db.Column(db.Boolean, default=False)
 
 # user model
 class User(db.Model, UserMixin):
@@ -216,7 +219,7 @@ def leaderboard(map_name):
     if map_name not in TRACKS:
         abort(404)
 
-    times = Leaderboard.query.filter_by(track=map_name).all()
+    times = Leaderboard.query.filter_by(track=map_name, verified=False).all()
     # sort times, only render top 10 on leaderboard
     times = sorted(
         times, key=lambda x: x.time_mins + (x.time_s / 60) + (x.time_ms / 60000)
@@ -227,6 +230,13 @@ def leaderboard(map_name):
         map_name=map_name,
         times=times,
     )
+
+UPLOAD_FOLDER = "static/uploads"
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route("/submit", methods=["POST"])
@@ -241,10 +251,25 @@ def submit():
         return redirect(url_for("leaderboard", map_name=map_name))
 
     if not validate_time(map_name, time_mins, time_s, time_ms, TRACKS):
+        flash("Invalid Time", "invalid_time")
         return redirect(url_for("leaderboard", map_name=map_name))
 
+    screenshot = request.files.get("screenshot")
 
-     # check if user already has a record for this track
+    if not screenshot:
+        flash("Missing screenshot file.", "missing_screenshot")
+        return redirect(url_for("leaderboard", map_name=map_name))
+
+    if not allowed_file(screenshot.filename):
+        flash("Invalid screenshot file type. Please upload a PNG or JPG file"
+        , "invalid_screenshot")
+        return redirect(url_for("leaderboard", map_name=map_name))
+
+    filename = secure_filename(screenshot.filename)
+    unique_name = f"{uuid.uuid4().hex}_{filename}"
+    filepath = os.path.join(app.config["UPLOAD_FOLDER"], unique_name)
+    screenshot.save(filepath)
+
     existing_entry = Leaderboard.query.filter_by(
         track=map_name, user_id=current_user.id
     ).first()
@@ -254,6 +279,9 @@ def submit():
         existing_entry.time_mins = time_mins
         existing_entry.time_s = time_s
         existing_entry.time_ms = time_ms
+        existing_entry.screenshot_path = filepath
+        existing_entry.verified = False
+        flash("Entry updated! Awaiting verification.", "pending")
     else:
         # new entry if not found
         new_entry = Leaderboard(
@@ -262,7 +290,10 @@ def submit():
             time_s=time_s,
             time_ms=time_ms,
             user_id=current_user.id,
+            screenshot_path=filepath,
+            verified=False,
         )
+        flash("New entry created! Awaiting verification.", "pending")
         db.session.add(new_entry)
 
     db.session.commit()
@@ -308,10 +339,22 @@ def login():
             login_user(user)
             return redirect(url_for("index"))
         else:
-            return "Invalid credentials", 401
+            flash("Invalid credentials", "invalid_credentials")
+            return redirect(url_for("login"))
 
     return render_template("login.html")
 
+@app.route("/verify/<int:entry_id>")
+@login_required
+def verify(entry_id):
+    if not current_user.username == "admin":
+        abort(403)
+
+    entry = Leaderboard.query.get_or_404(entry_id)
+    entry.verified = True
+    db.session.commit()
+    flash("Entry verified!", "success")
+    return redirect(url_for("admin_dashboard"))
 
 @app.route("/logout")
 @login_required

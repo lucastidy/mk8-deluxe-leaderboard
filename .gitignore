@@ -16,3 +16,6 @@ leaderboard.db
 
 # macOS
 .DS_Store
+
+# screenshots
+uploads/
