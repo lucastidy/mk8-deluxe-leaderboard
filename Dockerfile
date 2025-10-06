@@ -17,5 +17,5 @@ ENV MODE=production
 CMD if [ "$MODE" = "development" ]; then \
         flask run --host=0.0.0.0 --reload; \
     else \
-        gunicorn -b 0.0.0.0:5000 app:app --workers=4 --threads=2; \
+        gunicorn -b 0.0.0.0:5000 run:app --workers=4 --threads=2; \
     fi
