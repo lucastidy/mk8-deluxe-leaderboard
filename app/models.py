@@ -31,7 +31,7 @@ class Leaderboard(db.Model):
 
     #link to a user
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    user = db.relationship("User", backref="scores")
+    user = db.relationship("User", backref=db.backref("scores", lazy="dynamic"))
 
     screenshot_path = db.Column(db.String(255), nullable=False)
     verified = db.Column(db.Boolean, default=False)

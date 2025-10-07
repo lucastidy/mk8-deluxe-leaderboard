@@ -10,9 +10,13 @@
       <tbody>
         {% for entry in times %}
           <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ entry.user.username }}</td>
-            <td>{{ "%02d:%02d:%03d"|format(entry.time_mins, entry.time_s, entry.time_ms) }}</td>
+            {% if loop.last and user_index is not none %}
+              <td style="color: rgb(255, 145, 0); font-weight: bold;">{{ user_index + 1 }}</td>
+            {% else %}
+              <td>{{ loop.index }}</td>
+            {% endif %}
+              <td>{{ entry.user.username }}</td>
+              <td>{{ "%02d:%02d:%03d"|format(entry.time_mins, entry.time_s, entry.time_ms) }}</td>
           </tr>
         {% else %}
           <tr><td colspan="3" class="empty">No times yet — be the first!</td></tr>

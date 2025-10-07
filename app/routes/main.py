@@ -181,14 +181,27 @@ def leaderboard(map_name):
 
     times = Leaderboard.query.filter_by(track=map_name, verified=True).all()
     # sort times, only render top 10 on leaderboard
-    times = sorted(
+    full_times = sorted(
         times, key=lambda x: x.time_mins + (x.time_s / 60) + (x.time_ms / 60000)
-    )[:10]
+    )
+
+    times = full_times[:10]
+
+    user_index = None
+
+    if(
+        current_user.is_authenticated 
+        and current_user.scores.filter_by(track=map_name, verified=True).first() is not None
+    ):
+        if current_user.scores.filter_by(track=map_name, verified=True).first() not in times:
+            times.append(current_user.scores.filter_by(track=map_name, verified=True).first())
+            user_index = full_times.index(current_user.scores.filter_by(track=map_name, verified=True).first())
 
     return render_template(
         "leaderboard.html",
         map_name=map_name,
-        times=times
+        times=times,
+        user_index=user_index
     )
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
