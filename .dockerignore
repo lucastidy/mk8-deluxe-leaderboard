@@ -19,3 +19,5 @@ leaderboard.db
 .DS_Store
 *.swp
 
+# Ignore uploaded screenshots
+uploads/

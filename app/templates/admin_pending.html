@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Pending Submissions</h2>
+
+  {% with flashes = get_flashed_messages(with_categories=true) %}
+    {% if flashes %}
+    <ul class="flashes">
+      {% for category, message in flashes %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if entries %}
+    <table border="1" cellpadding="6">
+      <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Track</th>
+        <th>Time</th>
+        <th>Screenshot</th>
+        <th>Actions</th>
+      </tr>
+      {% for e in entries %}
+      <tr>
+        <td>{{ e.id }}</td>
+        <td>{{ e.user.username if e.user else "?" }}</td>
+        <td>{{ e.track }}</td>
+        <td>{{ e.time_mins }}:{{ "%02d"|format(e.time_s) }}.{{ "%03d"|format(e.time_ms) }}</td>
+        <td>
+          {% if e.screenshot_path %}
+            <a href="{{ url_for('static', 
+            filename=e.screenshot_path.split('static/')[-1]) }}" 
+            target="_blank" style="color: white; text-decoration: none;">View</a>
+          {% else %}
+            No file
+          {% endif %}
+        </td>
+        <td>
+          <form action="{{ url_for('admin.verify', entry_id=e.id) }}" method="POST" style="display:inline;">
+            <button type="submit" style="color: green; text-decoration: none;">Approve</button>
+          </form> |
+          <form action="{{ url_for('admin.reject', entry_id=e.id) }}" method="POST" style="display:inline;">
+            <button type="submit" style="color: red; text-decoration: none;">Reject</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>No pending submissions!</p>
+  {% endif %}
+{% endblock %}

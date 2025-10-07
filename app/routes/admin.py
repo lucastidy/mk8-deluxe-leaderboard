@@ -21,7 +21,7 @@ def admin_required(f):
 @admin_required
 def pending():
     pending_entries = Leaderboard.query.filter_by(verified=False).all()
-    return render_template("admin_pending.html", pending=pending_entries)
+    return render_template("admin_pending.html", entries=pending_entries)
 
 @admin.route("/verify/<int:entry_id>", methods=["POST"])
 @login_required
@@ -30,7 +30,7 @@ def verify(entry_id):
     entry = Leaderboard.query.get_or_404(entry_id)
     entry.verified = True
     db.session.commit()
-    flash("Entry verified.", "success")
+    flash("Entry verified", "success")
     return redirect(url_for("admin.pending"))
 
 @admin.route("/reject/<int:entry_id>", methods=["POST"])
@@ -40,10 +40,10 @@ def reject(entry_id):
     entry = Leaderboard.query.get_or_404(entry_id)
     try:
         if entry.screenshot_path and os.path.exists(entry.screenshot_path):
-            os.remove(entry.screenshot_path)
+            os.remove(entry.screenshot_path) # make sure this deletes the ss file
     except Exception as e:
         print("Error deleting file:", e)
     db.session.delete(entry)
     db.session.commit()
-    flash("Entry rejected and deleted.", "info")
+    flash("Entry rejected and deleted", "invalid_time")
     return redirect(url_for("admin.pending"))

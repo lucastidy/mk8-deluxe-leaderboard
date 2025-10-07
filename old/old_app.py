@@ -203,7 +203,7 @@
 #     id = db.Column(db.Integer, primary_key=True)
 #     username = db.Column(db.String(80), unique=True, nullable=False)
 #     password_hash = db.Column(db.String(128), nullable=False)
-#     is_admin = db.Column(db.Boolean, nullable=False, default=False) 
+#     is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
 #     def set_password(self, password):
 #         self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -238,7 +238,8 @@
 # app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # def allowed_file(filename):
-#     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+#     return "." in filename and filename.rsplit(".", 1)[1].lower()
+#     in ALLOWED_EXTENSIONS
 
 
 # @app.route("/submit", methods=["POST"])
@@ -363,7 +364,8 @@
 #     @wraps(f)
 #     def decorated(*args, **kwargs):
 #         # use is_admin if you added it, otherwise check username
-#         if not current_user.is_authenticated or not getattr(current_user, "is_admin", False):
+#         if not current_user.is_authenticated or not
+#         getattr(current_user, "is_admin", False):
 #             abort(403)
 #         return f(*args, **kwargs)
 #     return decorated

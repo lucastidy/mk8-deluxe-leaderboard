@@ -1,8 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    current_app,
+    abort
+)
 from flask_login import login_required, current_user
-from flask import current_app
 from werkzeug.utils import secure_filename
-import os, uuid
+import os
+import uuid
 
 
 from .. import db
@@ -170,7 +179,7 @@ def leaderboard(map_name):
     if map_name not in TRACKS:
         abort(404)
 
-    times = Leaderboard.query.filter_by(track=map_name, verified=False).all()
+    times = Leaderboard.query.filter_by(track=map_name, verified=True).all()
     # sort times, only render top 10 on leaderboard
     times = sorted(
         times, key=lambda x: x.time_mins + (x.time_s / 60) + (x.time_ms / 60000)
@@ -229,7 +238,7 @@ def submit():
         existing_entry.time_ms = time_ms
         existing_entry.screenshot_path = filepath
         existing_entry.verified = False
-        flash("Entry updated! Awaiting verification.", "pending")
+        flash("Entry updated! Awaiting verification...", "pending")
     else:
         # new entry if not found
         new_entry = Leaderboard(
@@ -240,9 +249,8 @@ def submit():
             user_id=current_user.id,
             screenshot_path=filepath,
             verified=False,
-            is_admin=False
         )
-        flash("New entry created! Awaiting verification.", "pending")
+        flash("New entry created! Awaiting verification...", "pending")
         db.session.add(new_entry)
 
     db.session.commit()
