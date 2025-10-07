@@ -4,9 +4,6 @@ services:
     build: .
     ports:
       - "5000:5000"
-    container_name: mk8dx_app
-    volumes:
-      - .:/app
     env_file:
       - .env
     depends_on:
@@ -14,10 +11,11 @@ services:
 
   db:
     image: postgres:16
+    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mk8db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-mk8db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

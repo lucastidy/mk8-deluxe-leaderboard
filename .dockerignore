@@ -21,3 +21,7 @@ leaderboard.db
 
 # Ignore uploaded screenshots
 uploads/
+
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

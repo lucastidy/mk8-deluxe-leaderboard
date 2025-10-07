@@ -1,0 +1,26 @@
+# Ignore sensitive files
+.env
+*.pem
+*.key
+
+# Ignore local development artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Ignore Git and IDE files
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+
+# Ignore cache and logs
+*.log
+*.tmp
+.env.*
+
+.env
