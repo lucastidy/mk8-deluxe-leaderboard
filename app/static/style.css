@@ -1,5 +1,5 @@
 /* page fills viewport; footer sits at bottom */
-html, body { height: 100%; margin: 0;  }
+html, body { height: 90%; margin: 0;  }
 body.layout {
   min-height: 100vh;
   display: flex;
@@ -31,25 +31,23 @@ body.layout {
 
 
 .bg-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;   /* "crop" the image */
-  height: 15%;        /* only show top 15% */
-  max-height: 20%;
-  opacity: 1;
-  z-index: -1;
+  position: absolute;               /* full-bleed background */
+  inset: 0;
+  z-index: 0;
+  height: 13%;
+  overflow: hidden;
 }
 
 .bg-wrapper img {
   width: 100%;
-  height: auto;
-  display: block;
-}
+  object-fit: cover;               
+  display: block;  
+}                
 
 .site-header h1 {
-  margin: 0; /* remove default margins */
+  margin: 0; 
+  position: relative;
+  z-index: 1;
 }
 
 .site-header h1 a {
@@ -125,10 +123,10 @@ font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, 
 }
 
 .board-wrapper {
-    overflow-x: hidden;      
+    overflow-x: visible;      
     max-width: 100%;
     max-width: 800px;
-    margin: 0 auto;       
+    margin: 0 auto;     
 }
 
 .board {
@@ -139,7 +137,7 @@ font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, 
     background: #fff;
     box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
     border-radius: 0.5rem;
-    overflow: hidden;
+    overflow: visible;
     font-size: 1rem;          
     color: #333;               
     position: relative;
@@ -157,11 +155,6 @@ font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, 
   --clr-3: #910b0b;
   --clr-4: #8ab51c;
   --clr-5: #354f9e;
-}
-
-.board { /* FIXME: duplicate */
-  border-radius: 0.8rem; 
-  position: relative;
 }
 
 .board::before,
@@ -306,18 +299,18 @@ font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, 
 }
 
 .submit-button-signup:focus {
-  outline: none;             /* remove default focus ring */
+  outline: none;             
 }
 
 .submit-button-signup:active {
-  transform: translateY(2px); /* ensures click state matches hover */
+  transform: translateY(2px); 
 }
 
 .sign-up-buttons {
   display: flex;
   gap: 0.3rem;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 2rem;
 } 
 
 .sign-up-buttons a {
@@ -339,13 +332,6 @@ font-family: "Luckiest Guy", system-ui, -apple-system, Segoe UI, Roboto, Arial, 
   box-shadow: 0 1px 0 rgb(197, 189, 231), 0 2px 2px rgba(0,0,0,0.25);
   transform: translateY(2px);
 }
-
-.sign-up-buttons {
-  display: flex;
-  gap: 0.3rem;
-  justify-content: center;
-  margin-top: 1rem;
-} 
 
 .not-signed-up a {
   display: inline-block;

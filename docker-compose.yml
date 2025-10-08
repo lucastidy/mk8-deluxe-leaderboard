@@ -1,9 +1,9 @@
-version: "3.9"
 services:
   web:
     build: .
     ports:
       - "5000:5000"
+    container_name: mk8dx
     env_file:
       - .env
     depends_on:
@@ -11,13 +11,13 @@ services:
 
   db:
     image: postgres:16
-    restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-mk8db}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
 
 volumes:
   postgres_data:

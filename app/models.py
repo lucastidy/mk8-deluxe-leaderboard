@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
 
 # leaderboard entry model
 class Leaderboard(db.Model):
-    id = db.Column(db.Integer, primary_key=True) #SHOULD THIS BE user_id?
+    id = db.Column(db.Integer, primary_key=True) 
     track = db.Column(db.String(100), nullable=False)
     time_mins = db.Column(db.Integer, nullable=False)
     time_s = db.Column(db.Integer, nullable=False)

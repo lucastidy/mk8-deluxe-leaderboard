@@ -25,7 +25,6 @@ def create_app():
         )
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
