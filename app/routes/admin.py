@@ -38,11 +38,6 @@ def verify(entry_id):
 @admin_required
 def reject(entry_id):
     entry = Leaderboard.query.get_or_404(entry_id)
-    try:
-        if entry.screenshot_path and os.path.exists(entry.screenshot_path):
-            os.remove(entry.screenshot_path) # make sure this deletes the ss file
-    except Exception as e:
-        print("Error deleting file:", e)
     db.session.delete(entry)
     db.session.commit()
     flash("Entry rejected and deleted", "invalid_time")
