@@ -20,10 +20,13 @@ def create_app():
         "DATABASE_URL"
     )
 
-    app.config["UPLOAD_FOLDER"] = os.getenv(
-        "UPLOAD_FOLDER"
-        )
+    # local static path for uploads
+    app.config["UPLOAD_FOLDER"] = os.getenv("UPLOAD_FOLDER")
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
+    # aws s3 settings (for prod)
+    app.config["USE_S3"] = os.getenv("USE_S3", "false").lower() == "true"
+    app.config["S3_BUCKET_NAME"] = os.getenv("S3_BUCKET_NAME")
 
     db.init_app(app)
     migrate.init_app(app, db)

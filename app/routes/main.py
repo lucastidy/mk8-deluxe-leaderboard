@@ -12,7 +12,9 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 import os
 import uuid
+import boto3
 
+s3 = boto3.client("s3")
 
 from .. import db
 from ..models import Leaderboard
@@ -230,15 +232,29 @@ def submit():
         flash("Missing screenshot file.", "missing_screenshot")
         return redirect(url_for("main.leaderboard", map_name=map_name))
 
-    if not allowed_file(screenshot.filename):
+    filename = secure_filename(screenshot.filename)
+
+    if not allowed_file(filename):
         flash("Invalid screenshot file type. Please upload a PNG or JPG file"
         , "invalid_screenshot")
         return redirect(url_for("main.leaderboard", map_name=map_name))
-
-    filename = secure_filename(screenshot.filename)
+    
     unique_name = f"{uuid.uuid4().hex}_{filename}"
-    filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_name)
-    screenshot.save(filepath)
+
+    if current_app.config["USE_S3"]:
+        # upload to s3 !!
+        s3.upload_fileobj(
+            screenshot,
+            current_app.config["S3_BUCKET_NAME"],
+            f"uploads/{unique_name}",  # folder inside the bucket
+            ExtraArgs={"ContentType": screenshot.content_type},
+        )
+        file_url = f"https://{current_app.config['S3_BUCKET_NAME']}.s3.us-west-2.amazonaws.com/uploads/{unique_name}"
+    else:
+        # save locally
+        file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_name)
+        screenshot.save(file_path)
+        file_url = f"/static/uploads/{unique_name}"
 
     existing_entry = Leaderboard.query.filter_by(
         track=map_name, user_id=current_user.id
@@ -249,7 +265,7 @@ def submit():
         existing_entry.time_mins = time_mins
         existing_entry.time_s = time_s
         existing_entry.time_ms = time_ms
-        existing_entry.screenshot_path = filepath
+        existing_entry.screenshot_path = file_url
         existing_entry.verified = False
         flash("Entry updated! Awaiting verification...", "pending")
     else:
@@ -260,7 +276,7 @@ def submit():
             time_s=time_s,
             time_ms=time_ms,
             user_id=current_user.id,
-            screenshot_path=filepath,
+            screenshot_path=file_url,
             verified=False,
         )
         flash("New entry created! Awaiting verification...", "pending")

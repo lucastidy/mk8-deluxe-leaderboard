@@ -26,3 +26,4 @@ Flask-Bcrypt
 Flask-WTF
 pytest
 ruff
+boto3

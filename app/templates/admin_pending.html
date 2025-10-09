@@ -29,12 +29,13 @@
         <td>{{ e.track }}</td>
         <td>{{ e.time_mins }}:{{ "%02d"|format(e.time_s) }}.{{ "%03d"|format(e.time_ms) }}</td>
         <td>
-          {% if e.screenshot_path %}
-            <a href="{{ url_for('static', 
-            filename=e.screenshot_path.split('static/')[-1]) }}" 
-            target="_blank" style="color: white; text-decoration: none;">View</a>
+          {% if e.screenshot_path.startswith('http') %}
+            <a href="{{ e.screenshot_path }}" target="_blank" style="color: white; text-decoration: none;">
+              View</a>
           {% else %}
-            No file
+            <a href="{{ url_for('static', filename=e.screenshot_path.split('static/')[-1]) }}" 
+            target="_blank" style="color: white; text-decoration: none;">
+              View</a>
           {% endif %}
         </td>
         <td>
