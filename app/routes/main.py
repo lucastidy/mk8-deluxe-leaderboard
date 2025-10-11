@@ -246,10 +246,10 @@ def submit():
         s3.upload_fileobj(
             screenshot,
             current_app.config["S3_BUCKET_NAME"],
-            f"uploads/{unique_name}",  # folder inside the bucket
+            unique_name,  # folder inside the bucket
             ExtraArgs={"ContentType": screenshot.content_type},
         )
-        file_url = f"https://{current_app.config['S3_BUCKET_NAME']}.s3.us-west-2.amazonaws.com/uploads/{unique_name}"
+        file_url = f"https://{current_app.config['S3_BUCKET_NAME']}.s3.us-west-2.amazonaws.com/{unique_name}"
     else:
         # save locally
         file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_name)
