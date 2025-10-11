@@ -9,6 +9,10 @@ COPY . .
 EXPOSE 5000
 
 #default mode = prod (gunicorn)
-ENV MODE=production
+#ENV MODE=production
 
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "run:app"]
+CMD if [ "$MODE" = "development" ]; then \
+        flask run --host=0.0.0.0 --reload; \
+    else \
+        gunicorn -b 0.0.0.0:5000 run:app; \
+    fi
