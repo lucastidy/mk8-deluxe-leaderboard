@@ -44,12 +44,6 @@ body.layout {
   display: block;  
 }                
 
-@media (max-width: 768px) {
-  .bg-wrapper {
-    height: 7%; 
-  }
-}
-
 .site-header h1 {
   margin: 0; 
   position: relative;
@@ -64,7 +58,7 @@ body.layout {
   border-radius: 8px;
   text-decoration: none;
   box-shadow: 0 4px 0 #c33, 0 6px 6px rgba(0,0,0,0.3);
-  font-size: clamp(1.2rem, 5vw, 2rem); /* scale w screen size */
+  font-size: clamp(0.6rem, 5vw, 2rem); /* scale w screen size */
   white-space: nowrap; /* stops breaking into two lines */
   transition: all 0.15s ease-in-out;
 }
