@@ -44,6 +44,12 @@ body.layout {
   display: block;  
 }                
 
+@media (max-width: 768px) {
+  .bg-wrapper {
+    height: 7%; 
+  }
+}
+
 .site-header h1 {
   margin: 0; 
   position: relative;
